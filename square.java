@@ -12,10 +12,28 @@ public class Square
   ImageIcon colBlack = new ImageIcon("empty2.png");
   JButton BlackBut = new JButton(colBlack);
 
-  public Square(double x, double y)
+
+  public Square(int x, int y, String Contain)
   {
     xPosition = x;
     yPosition = y;
+
+    if (Contain == "RED")
+    {
+      ImageIcon redCount = new ImageIcon("red.png");
+      WhiteBut.setIcon(redCount);
+    }
+    if (Contain == "WHITE")
+    {
+      ImageIcon whiteCount = new ImageIcon("white.png");
+      WhiteBut.setIcon(whiteCount);
+    }
+
+    if (Contain == "NONE")
+    {
+      WhiteBut.setIcon(colWhite);
+    }
+
 
 
   }
