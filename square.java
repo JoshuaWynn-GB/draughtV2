@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class Square
+public class Square implements ActionListener
 {
-  private double xPosition;
-  private double yPosition;
+  private int rowPosition;
+  private int colPosition;
 
 
   ImageIcon colWhite = new ImageIcon("empty.png");
@@ -13,10 +13,12 @@ public class Square
   JButton BlackBut = new JButton(colBlack);
 
 
-  public Square(int x, int y, String Contain)
+  public Square(int r, int c, String Contain)
   {
-    xPosition = x;
-    yPosition = y;
+    rowPosition = r;
+    colPosition = c;
+
+    WhiteBut.addActionListener(this);
 
     if (Contain == "RED")
     {
@@ -45,5 +47,10 @@ public class Square
   public JButton GetWhite()
   {
     return WhiteBut;
+  }
+
+  public void actionPerformed(ActionEvent e)
+  {
+    System.out.println("clicked: " + colPosition + ", " + rowPosition);
   }
 }
