@@ -1,12 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class Board
+public class Board implements ActionListener
 {
+  public int clicked=0;
+
+  public int firstColClick;
+  public int firstRowClick;
+
+  public int secColClick;
+  public int secRowClick;
 
 
-  public static void main(String[] args)
+  Square[][] squareArray = new Square[8][8];
+  public Board()
   {
+
 
     JFrame GUI = new JFrame();
     GUI.setTitle("Draughts");
@@ -16,7 +25,9 @@ public class Board
     JPanel panel = new JPanel();
 
     panel.setLayout(new GridLayout(8, 8));
-    Square[][] squareArray = new Square[8][8];
+
+
+
 
     //Create the grid
     for (int row=0; row<8;row++)
@@ -32,6 +43,7 @@ public class Board
             col++;
             squareArray[row][col] = new Square(row,col,"WHITE");
             panel.add(squareArray[row][col].GetWhite());
+            squareArray[row][col].GetWhite().addActionListener(this);
           }
           else if ((row==0)||(row==2))
           {
@@ -40,6 +52,7 @@ public class Board
             col++;
             squareArray[row][col] = new Square(row,col,"RED");
             panel.add(squareArray[row][col].GetWhite());
+            squareArray[row][col].GetWhite().addActionListener(this);
           }
           else
           {
@@ -48,6 +61,7 @@ public class Board
             col++;
             squareArray[row][col] = new Square(row,col,"NONE");
             panel.add(squareArray[row][col].GetWhite());
+            squareArray[row][col].GetWhite().addActionListener(this);
           }
         }
         else
@@ -56,6 +70,7 @@ public class Board
           {
             squareArray[row][col] = new Square(row,col,"WHITE");
             panel.add(squareArray[row][col].GetWhite());
+            squareArray[row][col].GetWhite().addActionListener(this);
             col++;
             squareArray[row][col] = new Square(row,col,"WHITE");
             panel.add(squareArray[row][col].GetBlack());
@@ -64,6 +79,7 @@ public class Board
           {
             squareArray[row][col] = new Square(row,col,"RED");
             panel.add(squareArray[row][col].GetWhite());
+            squareArray[row][col].GetWhite().addActionListener(this);
             col++;
             squareArray[row][col] = new Square(row,col,"RED");
             panel.add(squareArray[row][col].GetBlack());
@@ -72,6 +88,7 @@ public class Board
           {
             squareArray[row][col] = new Square(row,col,"NONE");
             panel.add(squareArray[row][col].GetWhite());
+            squareArray[row][col].GetWhite().addActionListener(this);
             col++;
             squareArray[row][col] = new Square(row,col,"NONE");
             panel.add(squareArray[row][col].GetBlack());
@@ -79,8 +96,8 @@ public class Board
         }
 
       }
-    }
 
+    }
 
 
 
@@ -92,4 +109,45 @@ public class Board
 }
 
 
+  public void actionPerformed(ActionEvent e)
+    {
+      Square square;
+      Square firstSquare;
+      Square secSquare;
+
+
+      for (int row=0; row<8; row++)
+      {
+        for(int col=0; col<8; col++)
+        {
+          square = squareArray[row][col];
+
+          JButton clickedSqr = square.GetWhite();
+          if (e.getSource().equals(clickedSqr))
+          {
+            if ((clicked == 0)&&(square.GetContents()=="WHITE"))
+            {
+              firstColClick = col;
+              firstRowClick = row;
+              clicked++;
+            }
+            else if ((clicked == 1) && (square.GetContents()=="NONE"))
+            {
+              secColClick = col;
+              secRowClick = row;
+              clicked = 0;
+
+              firstSquare = squareArray[firstRowClick][firstColClick];
+              secSquare = squareArray[secRowClick][secColClick];
+
+              System.out.println("first click: " + firstColClick + "," + firstRowClick + " second click: " + secColClick + ", " + secRowClick);
+              square.moveTo(firstSquare,secSquare);
+            }
+            break;
+          }
+        }
+
+      }
+
+    }
 }
