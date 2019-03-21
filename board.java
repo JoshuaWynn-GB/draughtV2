@@ -114,6 +114,7 @@ public class Board implements ActionListener
       Square square;
       Square firstSquare;
       Square secSquare;
+      int colour;
 
 
       for (int row=0; row<8; row++)
@@ -125,18 +126,39 @@ public class Board implements ActionListener
           JButton clickedSqr = square.GetWhite();
           if (e.getSource().equals(clickedSqr))
           {
-            if ((clicked == 0)&&(square.GetContents()=="WHITE"))
+
+            if (square.GetContents()=="WHITE")
+            {
+              clicked = 0;
+            }
+
+            if (square.GetContents()=="RED")
+            {
+              clicked = 0;
+            }
+
+
+            if ((clicked == 0)&&(square.GetContents()=="RED"))
             {
               firstColClick = col;
               firstRowClick = row;
-              clicked++;
+              clicked = 1;
+              colour = 1;
             }
+            else if((clicked == 0)&&(square.GetContents()=="WHITE"))
+            {
+              firstColClick = col;
+              firstRowClick = row;
+              clicked = 1;
+              colour = 2;
+            }
+
             else if ((clicked == 1) && (square.GetContents()=="NONE"))
             {
               secColClick = col;
               secRowClick = row;
               clicked = 0;
-
+              colour = 0;
               firstSquare = squareArray[firstRowClick][firstColClick];
               secSquare = squareArray[secRowClick][secColClick];
 

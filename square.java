@@ -70,9 +70,20 @@ public class Square
 
   public void moveTo(Square first,Square second)
   {
+
+
+    if (first.GetContents()== "WHITE")
+    {
+      second.GetWhite().setIcon(whiteCount);
+      second.squareContains = "WHITE";
+    }
+
+    if (first.GetContents()== "RED")
+    {
+      second.GetWhite().setIcon(redCount);
+      second.squareContains = "RED";
+    }
     first.GetWhite().setIcon(colWhite);
-    second.GetWhite().setIcon(whiteCount);
     first.squareContains= "NONE";
-    second.squareContains = "WHITE";
   }
 }
