@@ -11,6 +11,14 @@ public class Board implements ActionListener
   public int secColClick;
   public int secRowClick;
 
+  Square firstSquare;
+  Square secSquare;
+  Square moveWSpaceLeft;
+  Square moveWSpaceRight;
+  Square moveRSpaceLeft;
+  Square moveRSpaceRight;
+
+
 
   Square[][] squareArray = new Square[8][8];
   public Board()
@@ -112,9 +120,8 @@ public class Board implements ActionListener
   public void actionPerformed(ActionEvent e)
     {
       Square square;
-      Square firstSquare;
-      Square secSquare;
-      int colour;
+
+
 
 
       for (int row=0; row<8; row++)
@@ -124,8 +131,66 @@ public class Board implements ActionListener
           square = squareArray[row][col];
 
           JButton clickedSqr = square.GetWhite();
+
+
+
           if (e.getSource().equals(clickedSqr))
           {
+            System.out.println("clicked: " + col + ", " + row);
+
+            //moveable spaces for white & red
+
+            if (clicked==0)
+            {
+              if ((row==0))
+              {
+                System.out.println("     can't move anywhere");
+                moveWSpaceLeft = squareArray[row][col];
+                moveWSpaceRight = squareArray[row][col];
+
+                moveRSpaceLeft = squareArray[row][col];
+                moveRSpaceRight = squareArray[row][col];
+
+
+              }
+              else if (col==0)
+              {
+                System.out.println("     can move right");
+                moveWSpaceLeft = squareArray[row][col];
+                moveWSpaceRight = squareArray[row-1][col+1];
+
+                moveRSpaceLeft = squareArray[row][col];
+                moveRSpaceRight = squareArray[row+1][col+1];
+
+              }
+              else if (col==7)
+              {
+                System.out.println("     can move left");
+                moveWSpaceLeft = squareArray[row-1][col-1];
+                moveWSpaceRight = squareArray[row][col];
+
+                moveRSpaceLeft = squareArray[row+1][col-1];
+                moveRSpaceRight = squareArray[row][col];
+
+              }
+              else
+              {
+                System.out.println("     can move left & right");
+                moveWSpaceLeft = squareArray[row-1][col-1];
+                moveWSpaceRight = squareArray[row-1][col+1];
+
+                moveRSpaceLeft = squareArray[row+1][col-1];
+                moveRSpaceRight = squareArray[row+1][col+1];
+              }
+            }
+
+
+
+            JButton clickedWLeft = moveWSpaceLeft.GetWhite();
+            JButton clickedWRight = moveWSpaceRight.GetWhite();
+
+            JButton clickedRLeft = moveRSpaceLeft.GetWhite();
+            JButton clickedRRight = moveRSpaceRight.GetWhite();
 
             if (square.GetContents()=="WHITE")
             {
@@ -138,34 +203,45 @@ public class Board implements ActionListener
             }
 
 
+
             if ((clicked == 0)&&(square.GetContents()=="RED"))
             {
               firstColClick = col;
               firstRowClick = row;
               clicked = 1;
-              colour = 1;
+              firstSquare = squareArray[firstRowClick][firstColClick];
             }
             else if((clicked == 0)&&(square.GetContents()=="WHITE"))
             {
               firstColClick = col;
               firstRowClick = row;
               clicked = 1;
-              colour = 2;
+              firstSquare = squareArray[firstRowClick][firstColClick];
             }
 
-            else if ((clicked == 1) && (square.GetContents()=="NONE"))
+            else if ((clicked == 1) && (square.GetContents()=="NONE") && (firstSquare.GetContents() == "WHITE") && (row==firstRowClick-1) && ((col==firstColClick-1) || (col==firstColClick+1)))
             {
               secColClick = col;
               secRowClick = row;
               clicked = 0;
-              colour = 0;
-              firstSquare = squareArray[firstRowClick][firstColClick];
               secSquare = squareArray[secRowClick][secColClick];
-
-              System.out.println("first click: " + firstColClick + "," + firstRowClick + " second click: " + secColClick + ", " + secRowClick);
               square.moveTo(firstSquare,secSquare);
             }
+            else if ((clicked == 1) && (square.GetContents()=="NONE") && (firstSquare.GetContents() == "RED") && (row==firstRowClick+1) && ((col==firstColClick-1) || (col==firstColClick+1)))
+            {
+              secColClick = col;
+              secRowClick = row;
+              clicked = 0;
+              secSquare = squareArray[secRowClick][secColClick];
+              square.moveTo(firstSquare,secSquare);
+            }
+            else
+            {
+              clicked = 0;
+            }
+            System.out.println(clicked);
             break;
+
           }
         }
 
