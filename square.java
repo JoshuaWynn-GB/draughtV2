@@ -14,6 +14,8 @@ public class Square
 
   ImageIcon redCount = new ImageIcon("red.png");
   ImageIcon whiteCount = new ImageIcon("white.png");
+  ImageIcon redKingCount = new ImageIcon("red-king.png");
+  ImageIcon whiteKingCount = new ImageIcon("white-king.png");
 
 
 
@@ -83,7 +85,63 @@ public class Square
       second.GetWhite().setIcon(redCount);
       second.squareContains = "RED";
     }
+    if (first.GetContents()== "redKING")
+    {
+      second.GetWhite().setIcon(redKingCount);
+      second.squareContains = "redKING";
+    }
+    if (first.GetContents()== "whiteKING")
+    {
+      second.GetWhite().setIcon(whiteKingCount);
+      second.squareContains = "whiteKING";
+    }
     first.GetWhite().setIcon(colWhite);
     first.squareContains= "NONE";
+  }
+
+  public void takeCount(Square first,Square second,Square oponent)
+  {
+
+
+    if (first.GetContents()== "WHITE")
+    {
+      second.GetWhite().setIcon(whiteCount);
+      second.squareContains = "WHITE";
+    }
+
+    if (first.GetContents()== "RED")
+    {
+      second.GetWhite().setIcon(redCount);
+      second.squareContains = "RED";
+    }
+    if (first.GetContents()== "redKING")
+    {
+      second.GetWhite().setIcon(redKingCount);
+      second.squareContains = "redKING";
+    }
+    if (first.GetContents()== "whiteKING")
+    {
+      second.GetWhite().setIcon(whiteKingCount);
+      second.squareContains = "whiteKING";
+    }
+    first.GetWhite().setIcon(colWhite);
+    first.squareContains= "NONE";
+    oponent.GetWhite().setIcon(colWhite);
+    oponent.squareContains= "NONE";
+  }
+
+  public void upgrade(Square sqr)
+  {
+    if (sqr.GetContents()== "WHITE")
+    {
+      sqr.GetWhite().setIcon(whiteKingCount);
+      sqr.squareContains = "whiteKING";
+    }
+
+    if (sqr.GetContents()== "RED")
+    {
+      sqr.GetWhite().setIcon(redKingCount);
+      sqr.squareContains = "redKING";
+    }
   }
 }

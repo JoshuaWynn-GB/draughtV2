@@ -13,10 +13,7 @@ public class Board implements ActionListener
 
   Square firstSquare;
   Square secSquare;
-  Square moveWSpaceLeft;
-  Square moveWSpaceRight;
-  Square moveRSpaceLeft;
-  Square moveRSpaceRight;
+  Square opSquare;
 
 
 
@@ -120,6 +117,7 @@ public class Board implements ActionListener
   public void actionPerformed(ActionEvent e)
     {
       Square square;
+      boolean king = false;
 
 
 
@@ -136,61 +134,6 @@ public class Board implements ActionListener
 
           if (e.getSource().equals(clickedSqr))
           {
-            System.out.println("clicked: " + col + ", " + row);
-
-            //moveable spaces for white & red
-
-            if (clicked==0)
-            {
-              if ((row==0))
-              {
-                System.out.println("     can't move anywhere");
-                moveWSpaceLeft = squareArray[row][col];
-                moveWSpaceRight = squareArray[row][col];
-
-                moveRSpaceLeft = squareArray[row][col];
-                moveRSpaceRight = squareArray[row][col];
-
-
-              }
-              else if (col==0)
-              {
-                System.out.println("     can move right");
-                moveWSpaceLeft = squareArray[row][col];
-                moveWSpaceRight = squareArray[row-1][col+1];
-
-                moveRSpaceLeft = squareArray[row][col];
-                moveRSpaceRight = squareArray[row+1][col+1];
-
-              }
-              else if (col==7)
-              {
-                System.out.println("     can move left");
-                moveWSpaceLeft = squareArray[row-1][col-1];
-                moveWSpaceRight = squareArray[row][col];
-
-                moveRSpaceLeft = squareArray[row+1][col-1];
-                moveRSpaceRight = squareArray[row][col];
-
-              }
-              else
-              {
-                System.out.println("     can move left & right");
-                moveWSpaceLeft = squareArray[row-1][col-1];
-                moveWSpaceRight = squareArray[row-1][col+1];
-
-                moveRSpaceLeft = squareArray[row+1][col-1];
-                moveRSpaceRight = squareArray[row+1][col+1];
-              }
-            }
-
-
-
-            JButton clickedWLeft = moveWSpaceLeft.GetWhite();
-            JButton clickedWRight = moveWSpaceRight.GetWhite();
-
-            JButton clickedRLeft = moveRSpaceLeft.GetWhite();
-            JButton clickedRRight = moveRSpaceRight.GetWhite();
 
             if (square.GetContents()=="WHITE")
             {
@@ -202,50 +145,158 @@ public class Board implements ActionListener
               clicked = 0;
             }
 
-
-
-            if ((clicked == 0)&&(square.GetContents()=="RED"))
+            if ((square.GetContents()=="whiteKING")||(square.GetContents()=="redKING"))
             {
-              firstColClick = col;
-              firstRowClick = row;
-              clicked = 1;
-              firstSquare = squareArray[firstRowClick][firstColClick];
-            }
-            else if((clicked == 0)&&(square.GetContents()=="WHITE"))
-            {
-              firstColClick = col;
-              firstRowClick = row;
-              clicked = 1;
-              firstSquare = squareArray[firstRowClick][firstColClick];
-            }
-
-            else if ((clicked == 1) && (square.GetContents()=="NONE") && (firstSquare.GetContents() == "WHITE") && (row==firstRowClick-1) && ((col==firstColClick-1) || (col==firstColClick+1)))
-            {
-              secColClick = col;
-              secRowClick = row;
               clicked = 0;
-              secSquare = squareArray[secRowClick][secColClick];
-              square.moveTo(firstSquare,secSquare);
             }
-            else if ((clicked == 1) && (square.GetContents()=="NONE") && (firstSquare.GetContents() == "RED") && (row==firstRowClick+1) && ((col==firstColClick-1) || (col==firstColClick+1)))
+
+            if (clicked == 0)
             {
-              secColClick = col;
-              secRowClick = row;
-              clicked = 0;
-              secSquare = squareArray[secRowClick][secColClick];
-              square.moveTo(firstSquare,secSquare);
+              if ((square.GetContents()=="RED")||(square.GetContents()=="redKING"))
+              {
+                firstColClick = col;
+                firstRowClick = row;
+                clicked = 1;
+                firstSquare = squareArray[firstRowClick][firstColClick];
+              }
+              if((square.GetContents()=="WHITE")||(square.GetContents()=="whiteKING"))
+              {
+                firstColClick = col;
+                firstRowClick = row;
+                clicked = 1;
+                firstSquare = squareArray[firstRowClick][firstColClick];
+              }
             }
             else
             {
+              if ((square.GetContents()=="NONE") && (firstSquare.GetContents() == "WHITE") && (row==firstRowClick-1) && ((col==firstColClick-1) || (col==firstColClick+1)))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                square.moveTo(firstSquare,secSquare);
+                if (row==0)
+                {
+                  square.upgrade(secSquare);
+                }
+              }
+              if ((square.GetContents()=="NONE") && (firstSquare.GetContents() == "RED") && (row==firstRowClick+1) && ((col==firstColClick-1) || (col==firstColClick+1)))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                square.moveTo(firstSquare,secSquare);
+                if (row==7)
+                {
+                  square.upgrade(secSquare);
+                }
+              }
+              if ((square.GetContents()=="NONE") && (firstSquare.GetContents() == "WHITE") && (row==firstRowClick-2) && (col==firstColClick+2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick+1][secColClick-1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+                if (row==0)
+                {
+                  square.upgrade(secSquare);
+                }
+              }
+              if ((square.GetContents()=="NONE") && (firstSquare.GetContents() == "WHITE") && (row==firstRowClick-2) && (col==firstColClick-2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick+1][secColClick+1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+                if (row==7)
+                {
+                  square.upgrade(secSquare);
+                }
+              }
+              if ((square.GetContents()=="NONE") && (firstSquare.GetContents() == "RED") && (row==firstRowClick+2) && (col==firstColClick+2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick-1][secColClick-1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+                if (row==0)
+                {
+                  square.upgrade(secSquare);
+                }
+              }
+              if ((square.GetContents()=="NONE") && (firstSquare.GetContents() == "RED") && (row==firstRowClick+2) && (col==firstColClick-2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick-1][secColClick+1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+                if (row==7)
+                {
+                  square.upgrade(secSquare);
+                }
+              }
+              if ((square.GetContents()=="NONE") && ((firstSquare.GetContents() == "whiteKING")||(firstSquare.GetContents() == "redKING")) && ((row==firstRowClick+1)||(row==firstRowClick-1)) && ((col==firstColClick-1) || (col==firstColClick+1)))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                square.moveTo(firstSquare,secSquare);
+              }
+              if ((square.GetContents()=="NONE") && ((firstSquare.GetContents() == "whiteKING")||(firstSquare.GetContents() == "redKING")) && (row==firstRowClick-2) && (col==firstColClick+2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick+1][secColClick-1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+              }
+              if ((square.GetContents()=="NONE") && ((firstSquare.GetContents() == "whiteKING")||(firstSquare.GetContents() == "redKING")) && (row==firstRowClick-2) && (col==firstColClick-2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick+1][secColClick+1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+              }
+              if ((square.GetContents()=="NONE") && ((firstSquare.GetContents() == "whiteKING")||(firstSquare.GetContents() == "redKING")) && (row==firstRowClick+2) && (col==firstColClick+2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick-1][secColClick-1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+              }
+              if ((square.GetContents()=="NONE") && ((firstSquare.GetContents() == "whiteKING")||(firstSquare.GetContents() == "redKING")) && (row==firstRowClick+2) && (col==firstColClick-2))
+              {
+                secColClick = col;
+                secRowClick = row;
+                clicked = 0;
+                secSquare = squareArray[secRowClick][secColClick];
+                opSquare = squareArray[secRowClick-1][secColClick+1];
+                square.takeCount(firstSquare,secSquare,opSquare);
+              }
               clicked = 0;
             }
-            System.out.println(clicked);
             break;
-
           }
         }
 
       }
 
     }
+
 }
